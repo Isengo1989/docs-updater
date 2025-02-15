@@ -87,5 +87,5 @@ function isBotPR(pr: any): boolean {
 }
 
 function isRelevantPREvent(event: string, action: string): boolean {
-  return event === "pull_request" && ["opened", "synchronize"].includes(action);
+  return event === "pull_request" && ["opened"].includes(action);
 }
