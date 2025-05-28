@@ -1,9 +1,10 @@
 import * as dotenv from "dotenv";
-import { createAgent, createOpenAILLM } from "spinai";
+import { createAgent } from "spinai";
 import { DocConfig, ReviewState } from "./types";
 import { createFullConfig } from "./config";
 import { actions } from "./actions";
 import { startServer } from "./server";
+import OpenAI from "openai";
 
 dotenv.config();
 
@@ -25,6 +26,9 @@ export function createDocUpdateAgent(
   if (!openAiKey) throw new Error("OpenAI API key is required");
   if (!githubToken) throw new Error("GitHub token is required");
 
+  // Create OpenAI instance
+  const openai = new OpenAI({ apiKey: openAiKey });
+
   // Create the agent
   const agent = createAgent<ReviewState>({
     instructions: `You are a documentation maintenance agent that helps keep documentation in sync with code changes.
@@ -36,10 +40,11 @@ export function createDocUpdateAgent(
     5. Update navigation structure in mint.json as needed
     6. ${config.prConfig.updateOriginalPr ? "Update the original PR" : "Create a new PR"} with the documentation updates`,
     actions,
-    llm: createOpenAILLM({
-      apiKey: openAiKey,
+    model: {
+      provider: "openai",
       model: "gpt-4-turbo-preview",
-    }),
+      client: openai,
+    },
     agentId: "mintlify-update-agent",
     // Optional: Enable SpinAI monitoring
     // spinApiKey: process.env.SPINAI_API_KEY,

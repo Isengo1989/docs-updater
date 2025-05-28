@@ -66,7 +66,7 @@ async function analyzeChanges(
         role: "system" as const,
         content: `You are a code analysis expert. Analyze the following code changes and provide:
 1. A brief summary of the changes
-2. Identification of impacted areas/categories
+2. Identification of impacted areas/categories/articles/resources
 3. Assessment of whether these are significant changes (new features, API changes, etc.)
 4. Related files that might need documentation updates
 

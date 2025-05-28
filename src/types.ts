@@ -27,6 +27,11 @@ export interface DocConfig {
   docsRepoOwner?: string; // GitHub owner of docs repo if different
   docsRepoName?: string; // Name of docs repo if different
   docsBranch?: string; // Branch to update (defaults to 'main')
+  
+  // Source repository settings
+  sourceRepoOwner?: string; // GitHub owner of source code repo
+  sourceRepoName?: string; // Name of source code repo
+  sourceBranch?: string; // Branch of source code repo
 
   // Documentation settings
   fileTypes?: string[]; // Doc file types (defaults to ['.mdx', '.md'])
@@ -47,6 +52,11 @@ export interface DocUpdateConfig {
     repo: string;
     branch: string;
     monorepo: boolean;
+  };
+  sourceRepo?: {
+    owner: string;
+    repo: string;
+    branch: string;
   };
   matchRules: {
     docExtensions: string[];

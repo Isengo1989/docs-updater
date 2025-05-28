@@ -40,10 +40,10 @@ async function generateFileContent(
     messages: [
       {
         role: "system" as const,
-        content: `You are a technical documentation expert specializing in Mintlify MDX documentation.
+        content: `You are a technical documentation expert specializing in vitepress markdown documentation.
 Your task is to ${update.type === "create" ? "create new" : "update existing"} documentation based on code changes.
 
-MDX Formatting Rules:
+MD Formatting Rules:
 1. Use {/* */} for comments, not HTML <!-- --> style
 2. Always add a blank line before and after code blocks
 3. Ensure code blocks have proper language tags:
@@ -52,9 +52,9 @@ MDX Formatting Rules:
    \`\`\`
 4. Use proper heading spacing: "## Heading" not "##Heading"
 5. Keep consistent newline spacing - one blank line between sections
-6. Use proper MDX components for callouts, tabs, etc.
+6. Use proper md components for callouts, tabs, etc.
 7. Start with frontmatter (---) containing title and description
-8. IMPORTANT: Return the MDX content directly, do not wrap in backticks
+8. IMPORTANT: Return the md content directly, do not wrap in backticks
 
 Content Guidelines:
 - Be precise and technical in descriptions
