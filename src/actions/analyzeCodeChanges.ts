@@ -2,7 +2,7 @@ import { createAction } from "spinai";
 import type { SpinAiContext } from "spinai";
 import type { ReviewState, CodeChange, CodeAnalysis } from "../types";
 import { Octokit } from "@octokit/rest";
-import OpenAI from "openai";
+import { openai } from "@ai-sdk/openai";
 
 interface AnalyzeCodeChangesParams {
   owner: string;
@@ -23,7 +23,6 @@ function isAnalyzeCodeChangesParams(
 }
 
 async function analyzeChanges(
-  openai: OpenAI,
   files: { filename: string; patch?: string; status: string }[]
 ): Promise<CodeAnalysis> {
   const changes: CodeChange[] = [];
@@ -59,8 +58,7 @@ async function analyzeChanges(
   }
 
   // Use LLM for deeper analysis
-  const response = await openai.chat.completions.create({
-    model: "gpt-4-turbo-preview",
+  const response = await openai("gpt-4o").complete({
     messages: [
       {
         role: "system" as const,
@@ -147,7 +145,6 @@ export const analyzeCodeChanges = createAction({
     }
 
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
     // Get the PR diff
     const { data: files } = await octokit.pulls.listFiles({
@@ -157,7 +154,7 @@ export const analyzeCodeChanges = createAction({
     });
 
     // Analyze the changes
-    const analysis = await analyzeChanges(openai, files);
+    const analysis = await analyzeChanges(files);
 
     // Store analysis in state
     const state = context.state as ReviewState;

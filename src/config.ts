@@ -1,15 +1,12 @@
 import { DocConfig, DocUpdateConfig } from "./types";
 
 export const defaultConfig: Required<DocConfig> = {
-  docsPath: "",
-  isMonorepo: false,
+  docsPath: "docs",
+  isMonorepo: true,
   docsRepoOwner: "Isengo1989",
-  docsRepoName: "docs-1",
-  docsBranch: "master",
-  sourceRepoOwner: "Isengo1989",
-  sourceRepoName: "platform",
-  sourceBranch: "master",
-  fileTypes: [".mdx", ".md"],
+  docsRepoName: "platform",
+  docsBranch: "trunk",
+  fileTypes: [".md"],
   ignorePaths: ["**/node_modules/**", "**/.git/**"],
   createNewPr: true,
   labels: ["documentation"],
@@ -29,13 +26,6 @@ export function createFullConfig(
           repo: config.docsRepoName || "",
           branch: config.docsBranch,
           monorepo: config.isMonorepo,
-        }
-      : undefined,
-    sourceRepo: config.sourceRepoOwner
-      ? {
-          owner: config.sourceRepoOwner,
-          repo: config.sourceRepoName || "",
-          branch: config.sourceBranch,
         }
       : undefined,
     matchRules: {

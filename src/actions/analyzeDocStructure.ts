@@ -7,7 +7,7 @@ import type {
   NavigationItem,
 } from "../types";
 import { Octokit } from "@octokit/rest";
-import OpenAI from "openai";
+import { openai } from "@ai-sdk/openai";
 
 interface AnalyzeDocStructureParams {
   owner: string;
@@ -106,7 +106,6 @@ async function buildDocStructure(
 }
 
 async function analyzeDocReferences(
-  openai: OpenAI,
   docStructure: DocStructure,
   octokit: Octokit,
   owner: string,
@@ -129,8 +128,7 @@ async function analyzeDocReferences(
         );
 
         // Use LLM to analyze file content for references
-        const response = await openai.chat.completions.create({
-          model: "gpt-4-turbo-preview",
+        const response = await openai("gpt-4o").complete({
           messages: [
             {
               role: "system" as const,
@@ -204,7 +202,6 @@ export const analyzeDocStructure = createAction({
 
     const state = context.state as ReviewState;
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
     // Get docs repository information
     const docsRepo = state.docsRepo || {
@@ -229,7 +226,6 @@ export const analyzeDocStructure = createAction({
 
     // Analyze references between files
     docStructure = await analyzeDocReferences(
-      openai,
       docStructure,
       octokit,
       docsRepo.owner,
