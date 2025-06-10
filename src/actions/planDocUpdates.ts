@@ -182,7 +182,6 @@ export const planDocUpdates = createAction({
 
     // Store plan in state
     state.updatePlan = plan;
-
     // Log the plan
     console.log("\nUpdate Plan Summary:", plan.summary);
     console.log("\nPlanned Updates:");
