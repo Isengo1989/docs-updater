@@ -1,11 +1,11 @@
 import { DocConfig, DocUpdateConfig } from "./types";
 
 export const defaultConfig: Required<DocConfig> = {
-  docsPath: "docs",
-  isMonorepo: true,
+  docsPath: "",
+  isMonorepo: false,
   docsRepoOwner: "Isengo1989",
-  docsRepoName: "platform",
-  docsBranch: "trunk",
+  docsRepoName: "docs-1",
+  docsBranch: "master",
   fileTypes: [".md"],
   ignorePaths: ["**/node_modules/**", "**/.git/**"],
   createNewPr: true,
