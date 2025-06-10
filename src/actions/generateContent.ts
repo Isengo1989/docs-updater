@@ -8,7 +8,7 @@ import type {
   CodeAnalysis,
 } from "../types";
 import { Octokit } from "@octokit/rest";
-import OpenAI from "openai";
+import { openai } from "@ai-sdk/openai";
 
 interface GenerateContentParams {
   owner: string;
@@ -27,7 +27,6 @@ function isGenerateContentParams(
 }
 
 async function generateFileContent(
-  openai: OpenAI,
   update: PlannedDocUpdate,
   docStructure: DocStructure,
   codeAnalysis: CodeAnalysis,
@@ -35,8 +34,7 @@ async function generateFileContent(
   templateContent: string | null,
   config: ReviewState["config"]
 ): Promise<string> {
-  const response = await openai.chat.completions.create({
-    model: "gpt-4-turbo-preview",
+  const response = await openai("gpt-4o").complete({
     messages: [
       {
         role: "system" as const,
@@ -181,7 +179,6 @@ export const generateContent = createAction({
     }
 
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
     console.log("\n=== Generating Documentation Content ===");
 
@@ -246,7 +243,6 @@ export const generateContent = createAction({
 
       // Generate content
       const content = await generateFileContent(
-        openai,
         update,
         state.docStructure,
         state.codeAnalysis,

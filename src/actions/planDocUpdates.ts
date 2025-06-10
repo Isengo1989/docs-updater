@@ -6,7 +6,7 @@ import type {
   DocStructure,
   UpdatePlan,
 } from "../types";
-import OpenAI from "openai";
+import { openai } from "@ai-sdk/openai";
 
 interface PlanDocUpdatesParams {
   owner: string;
@@ -25,14 +25,12 @@ function isPlanDocUpdatesParams(
 }
 
 async function generateUpdatePlan(
-  openai: OpenAI,
   codeAnalysis: CodeAnalysis,
   docStructure: DocStructure,
   config: ReviewState["config"]
 ): Promise<UpdatePlan> {
   // Use LLM to analyze changes and plan documentation updates
-  const response = await openai.chat.completions.create({
-    model: "gpt-4-turbo-preview",
+  const response = await openai("gpt-4o").complete({
     messages: [
       {
         role: "system" as const,
@@ -173,13 +171,10 @@ export const planDocUpdates = createAction({
       );
     }
 
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
     console.log("\n=== Planning Documentation Updates ===");
 
     // Generate the update plan
     const plan = await generateUpdatePlan(
-      openai,
       state.codeAnalysis,
       state.docStructure,
       state.config

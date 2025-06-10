@@ -17,6 +17,7 @@ export async function startServer(options: ServerOptions = {}) {
 
   // Single webhook endpoint
   app.post("/webhook", (c) => handleWebhook(c, agent));
+  
 
   // Start server
   const port = options.port || parseInt(process.env.PORT || "3000", 10);
